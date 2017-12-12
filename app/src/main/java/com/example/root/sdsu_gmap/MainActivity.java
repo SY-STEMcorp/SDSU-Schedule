@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +38,11 @@ public class MainActivity extends AppCompatActivity {
         final EditText login = (EditText) findViewById(R.id.LoginField);
         final EditText pass = (EditText) findViewById(R.id.PasswordField);
 
-        NetworkCommunicator NC = new NetworkCommunicator(Constants.HOST + "login.php?email=" + login.getText() + "&password=" + pass.getText());
+        ArrayList<String> parameters = new ArrayList<>();
+        parameters.add("Email=" + login.getText());
+        parameters.add("Password=" + pass.getText());
+
+        NetworkCommunicator NC = new NetworkCommunicator(Constants.HOST + "login.php", parameters);
         try {
             String content = NC.execute().get();
 

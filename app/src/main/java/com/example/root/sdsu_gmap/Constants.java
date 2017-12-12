@@ -7,6 +7,6 @@ package com.example.root.sdsu_gmap;
 
 public class Constants {
 
-    public static final String HOST = "http://192.168.43.160/";
+    public static final String HOST = "http://192.168.1.22/";
 
 }

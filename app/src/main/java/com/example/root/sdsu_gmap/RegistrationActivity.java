@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -28,7 +29,11 @@ public class RegistrationActivity extends AppCompatActivity {
         final EditText email = (EditText) findViewById(R.id.emailField);
         final EditText pwd = (EditText) findViewById(R.id.passwordField);
 
-        NetworkCommunicator NC = new NetworkCommunicator(Constants.HOST + "registration.php?Email=" + email.getText() + "&Password=" + pwd.getText());
+        ArrayList<String> parameters = new ArrayList<>();
+        parameters.add("Email=" + email.getText());
+        parameters.add("Password=" + pwd.getText());
+
+        NetworkCommunicator NC = new NetworkCommunicator(Constants.HOST + "registration.php", parameters);
         try {
             String Response = NC.execute().get();
 
