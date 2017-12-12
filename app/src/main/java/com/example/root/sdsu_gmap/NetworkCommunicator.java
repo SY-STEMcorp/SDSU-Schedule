@@ -3,6 +3,8 @@ package com.example.root.sdsu_gmap;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -61,6 +63,11 @@ public class NetworkCommunicator extends AsyncTask<Void, Void, String> {
                 content.append(line);
             }
 
+            try {
+                JSONParser.Parse(content.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             return content.toString();
 
