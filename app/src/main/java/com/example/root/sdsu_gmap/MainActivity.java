@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -14,12 +13,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
-
-    private String UserID;
-    private String UserToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,23 +41,21 @@ public class MainActivity extends AppCompatActivity {
 
         NetworkCommunicator NC = new NetworkCommunicator(Constants.HOST + "login.php", parameters);
         try {
-            String content = NC.execute().get();
+            HashMap<String, Object> Response = NC.execute().get();
 
-            String[] Response = content.split(" ");
+            String ErrorCode = Response.get("ErrorCode").toString();
+            String Status = Response.get("Status").toString();
 
-            if(Response.length == 3 && Response[0].equals("0") && Response[1].length() > 0 && Response[2].length() > 0)
+            if(ErrorCode.equals("0") && Status.equals("0"))
             {
-                UserID = Response[1];
-                UserToken = Response[2];
-
                 Intent LoggedInActivity = new Intent(getBaseContext(), LoggedInActivity.class);
                 startActivity(LoggedInActivity);
             }
-            else if(Response.length == 1 && Response[0].equals("1"))
+            else if(ErrorCode.equals("1"))
             {
                 //
             }
-            else if(Response.length == 1 && Response[0].equals("2"))
+            else if(ErrorCode.equals("2"))
             {
                 //return 2;
             }

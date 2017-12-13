@@ -3,8 +3,6 @@ package com.example.root.sdsu_gmap;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
-import org.json.JSONException;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,12 +11,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by root on 11/17/17.
  */
 
-public class NetworkCommunicator extends AsyncTask<Void, Void, String> {
+public class NetworkCommunicator extends AsyncTask<Void, Void, HashMap<String, Object>> {
 
     private String url = "";
     private String urlParameters = "";
@@ -30,7 +29,7 @@ public class NetworkCommunicator extends AsyncTask<Void, Void, String> {
     }
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected HashMap<String, Object> doInBackground(Void... params) {
 
         try {
 
@@ -63,23 +62,17 @@ public class NetworkCommunicator extends AsyncTask<Void, Void, String> {
                 content.append(line);
             }
 
-//            try {
-//                JSONParser.Parse(content.toString());
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-
-            return content.toString();
+            return JSONParser.Parse(content.toString());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return "";
+        return null;
     }
 
     @Override
-    protected void onPostExecute(final String success) {
+    protected void onPostExecute(final HashMap<String, Object>  success) {
         super.onPostExecute(success);
     }
 

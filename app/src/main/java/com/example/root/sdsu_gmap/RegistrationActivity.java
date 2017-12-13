@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -35,15 +36,17 @@ public class RegistrationActivity extends AppCompatActivity {
 
         NetworkCommunicator NC = new NetworkCommunicator(Constants.HOST + "registration.php", parameters);
         try {
-            String Response = NC.execute().get();
+            HashMap<String, Object> Response = NC.execute().get();
+            String ErrorCode = Response.get("ErrorCode").toString();
+            String Status = Response.get("Status").toString();
 
-            if(Response.equals("0"))
+            if(ErrorCode.equals("0") && Status.equals("0"))
                 finish();
-            else if(Response.equals("1"))
+            else if(ErrorCode.equals("1"))
                 return;
-            else if(Response.equals("2"))
+            else if(ErrorCode.equals("2"))
                 return;
-            else if(Response.equals("3"))
+            else if(ErrorCode.equals("3"))
                 return;
 
         } catch (InterruptedException | ExecutionException e) {
