@@ -1,6 +1,6 @@
 package com.example.root.sdsu_gmap;
 
-import android.widget.Toast;
+import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by root on 12/13/17.
@@ -16,36 +15,90 @@ import java.util.Map;
 
 public class JSONParser {
 
-    public static void Parse(String JSONString) throws JSONException {
-        JSONObject mainJSONObject = new JSONObject(JSONString);
-        JSONArray names = mainJSONObject.names();
+    public static List<Pair<String, Object>> Parse(String JSONString) {
 
-        List<Course> data = new ArrayList<>();
+        List<Pair<String, Object>> data = (List<Pair<String, Object>>) RecursiveJSONParsing(JSONString);
 
-        for(int i = 0; i < names.length(); i++)
-        {
-            String name = names.getString(i);
+        return data;
+    }
 
-//            try
-//            {
-//                JSONObject jsonobject = mainJSONObject.getJSONObject(name);
-//
-//                Course course = new Course( jsonobject.getString("Course"),
-//                                            jsonobject.getString("CourseDescription"),
-//                                            jsonobject.getString("CourseFormat"),
-//                                            jsonobject.getInt("Units"),
-//                                            jsonobject.getString("ScheduleID"),
-//                                            jsonobject.getString("Instructor"),
-//                                            new ArrayList<Lecture>());
-//
-//
-//
-//            }
-//            catch (JSONException e)
-//            {
-//                throw e;
-//            }
+    private static Object RecursiveJSONParsing(String str)
+    {
+        List<Pair<String, Object>> tempdata = new ArrayList<>();
+
+        try{
+            JSONArray temparray = new JSONArray(str);
+
+            for(int i = 0; i < temparray.length(); i++)
+            {
+                Object temp = RecursiveJSONParsing(temparray.getString(i));
+                tempdata.add(new Pair<>("JSONArray" + i, temp));
+            }
+
+        } catch (JSONException _) {
+            try {
+                JSONObject tempobject = new JSONObject(str);
+
+                JSONArray names = tempobject.names();
+
+                for(int i = 0; i < names.length(); i++)
+                {
+                    Object temp = RecursiveJSONParsing(tempobject.getString(names.getString(i)));
+                    tempdata.add(new Pair<>(names.getString(i), temp));
+                }
+
+            } catch (JSONException _2) {
+                return str;
+            }
         }
+
+        return tempdata;
+    }
+
+    public static void test()
+    {
+        Parse("{\"test\": [\"hi\": \"hello\", \"egehe\": \"fdsfdsf\"]}");
     }
 
 }
+
+//        for(int i = 0; i < jsonArray.length(); i++)
+//       {
+//           JSONObject object;
+//
+//           try {
+//               object = jsonArray.getJSONObject(i);
+//           } catch (JSONException e) {
+//               e.printStackTrace();
+//               return null;
+//           }
+//
+//           JSONArray names = object.names();
+//
+//           for(int n = 0; n < names.length(); n++)
+//           {
+//               String objname;
+//               try {
+//                   objname = names.getString(n);
+//               } catch (JSONException e) {
+//                   e.printStackTrace();
+//                   return null;
+//               }
+//
+//               try {
+//                   JSONArray temp = object.getJSONArray(objname);
+//                   data.add(new Pair<String, Object>(objname, RecursiveJSONParsing(temp)));
+//               } catch (JSONException _) {
+//                   try {
+//                       JSONObject temp = object.getJSONObject(objname);
+//                       data.add(new Pair<String, Object>(objname, temp.toString()));
+//                   } catch (JSONException e) {
+//                       e.printStackTrace();
+//                       return null;
+//                   }
+//               }
+//           }
+//
+//       }
+//
+//       return data;

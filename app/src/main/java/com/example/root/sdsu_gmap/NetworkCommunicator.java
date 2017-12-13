@@ -63,11 +63,11 @@ public class NetworkCommunicator extends AsyncTask<Void, Void, String> {
                 content.append(line);
             }
 
-            try {
-                JSONParser.Parse(content.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                JSONParser.Parse(content.toString());
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
 
             return content.toString();
 
